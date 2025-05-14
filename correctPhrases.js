@@ -38,6 +38,13 @@ const correctPhrasesData = {
     ["nosotros", "somos", "altos"],
     ["nosotros", "somos", "buenos"],
     ["nosotros", "somos", "malos"],
+        
+    ["nosotras", "somos", "felices"],
+    ["nosotras", "somos", "grandes"],
+    ["nosotras", "somos", "altas"],
+    ["nosotras", "somos", "buenas"],
+    ["nosotras", "somos", "malos"],
+        
     ["vosotros", "sois", "felices"],
     ["vosotros", "sois", "grandes"],
     ["vosotros", "sois", "altos"],
