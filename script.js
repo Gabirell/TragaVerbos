@@ -126,12 +126,53 @@
     }
 
     function confirmSelection() {
-        if (isInitialSpinning || isGameOver) return; if (currentWheelIndex.some(idx => idx < 0) || !wheelData[0] || currentWheelIndex[0] >= wheelData[0].length || !wheelData[1] || currentWheelIndex[1] >= wheelData[1].length || !wheelData[2] || currentWheelIndex[2] >= wheelData[2].length) { console.error("Error: Índices inválidos.", currentWheelIndex, wheelData); $('#feedback').text("Error interno."); return; } const selectedPronoun = wheelData[0][currentWheelIndex[0]]; const selectedVerb = wheelData[1][currentWheelIndex[1]]; const selectedWord = wheelData[2][currentWheelIndex[2]]; const currentPhraseArray = [selectedPronoun, selectedVerb, selectedWord]; console.log(`Confirmando [${currentTense}]: ${currentPhraseArray.join(' ')}`);
-        stopButtonIllumination(); isInitialSpinning = true; updateUI(); const isCorrect = correctPhrasesData[currentTense].some(correct => correct.length === 3 && correct[0] === selectedPronoun && correct[1] === selectedVerb && correct[2] === selectedWord ); let message = "";
-        if (isCorrect) { message = `¡Correcto! "${currentPhraseArray.join(' ')}". +${POINTS_PER_WIN} créditos`; playSound('audioWin'); addCredits(POINTS_PER_WIN); }
-        else { const translatedTense = tenseTranslations[currentTense] || currentTense; message = `Incorrecto para ${translatedTense}. Intenta de nuevo.`; playSound('audioLose'); }
-        $('#feedback').text(message).removeClass('correct incorrect').addClass(isCorrect ? 'correct' : 'incorrect'); setTimeout(() => { if (credits <= 0) { playSound('audioGameOver'); gameOver(); } else { initialSpinAllWheels(); } }, isCorrect ? FEEDBACK_DELAY_CORRECT : FEEDBACK_DELAY_INCORRECT);
+    if (isInitialSpinning || isGameOver) return;
+
+    if (
+        currentWheelIndex.some(idx => idx < 0) ||
+        !wheelData[0] || currentWheelIndex[0] >= wheelData[0].length ||
+        !wheelData[1] || currentWheelIndex[1] >= wheelData[1].length ||
+        !wheelData[2] || currentWheelIndex[2] >= wheelData[2].length
+    ) return;
+
+    stopButtonIllumination();
+    isInitialSpinning = true;
+    updateUI();
+
+    const isCorrect = correctPhrasesData[currentTense].some(correct =>
+        correct.length === 3 &&
+        correct[0] === selectedPronoun &&
+        correct[1] === selectedVerb &&
+        correct[2] === selectedWord
+    );
+
+    let message;
+    if (isCorrect) {
+        message = `¡Correcto! "${currentPhraseArray.join(' ')}". +${POINTS_PER_WIN} créditos`;
+        playSound('audioWin');
+        addCredits(POINTS_PER_WIN);
+    } else {
+        const translatedTense = tenseTranslations[currentTense] || currentTense;
+        message = `Incorrecto para ${translatedTense}. Intenta de nuevo.`;
+        playSound('audioLose');
+        addCredits(-1); // Subtract 1 credit for a wrong answer
     }
+
+    $('#feedback')
+        .text(message)
+        .removeClass('correct incorrect')
+        .addClass(isCorrect ? 'correct' : 'incorrect');
+
+    setTimeout(() => {
+        if (credits <= 0) {
+            playSound('audioGameOver');
+            gameOver();
+        } else {
+            isInitialSpinning = false;
+            updateUI();
+        }
+    }, isCorrect ? FEEDBACK_DELAY_CORRECT : FEEDBACK_DELAY_INCORRECT);
+}
 
     function populateWheelHTML(wheelNum, itemsArray) {
         const $wheelItems = $(`#wheel${wheelNum} .items`); $wheelItems.empty(); const repetitions = 5;
