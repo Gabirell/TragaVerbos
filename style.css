@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=DotGothic16&display=swap');
+
+/* Reset Básico */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { border: 0; font-family: inherit; font-size: 100%; font-style: inherit; font-weight: inherit; margin: 0; outline: 0; padding: 0; vertical-align: baseline; }
+:focus { outline: 0; } ol, ul { list-style: none; } table { border-collapse: separate; border-spacing: 0; } caption, th, td { font-weight: normal; text-align: left; } blockquote:before, blockquote:after, q:before, q:after { content: ""; } blockquote, q { quotes: "" ""; } a img { border: 0; } article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+
+/* Estilos Generales */
+html { background: #2B2B2B; }
+body { background: transparent; font-family: Arial, Helvetica, sans-serif;}
+#page { margin: 0 auto; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 30px 0; }
+#content { padding: 20px; }
+
+/* Contenedor Principal con Fondo */
+#slot-machine-container {
+    position: relative; padding: 15px; display: inline-block;
+    background: linear-gradient(to bottom, #5a5a5a 0%, #3a3a3a 100%);
+    border-radius: 25px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+    border: 3px solid #222;
+}
+
+/* Slot Machine (parte naranja) */
+#slot-machine {
+    border-radius: 10px; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.6);
+    height: 250px; /* Altura parte superior */
+    position: relative; width: 400px; margin-bottom: 0;
+}
+#slot-body {
+    background: #ED5D1E; border-radius: 10px; border: 2px solid #D4501A;
+    box-sizing: border-box; box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.6);
+    height: 100%; position: relative; width: 100%; z-index: 2;
+}
+#slot-frame {
+    background: #1b1b1b; background: linear-gradient(to bottom, #44022e 0%,#880b5c 8%,#3a3a3a 20%,#0a0a0a 47%,#010101 50%,#0d0d0d 54%,#444444 100%);
+    border-radius: 6px; box-shadow: 0 0 16px rgba(255, 255, 255, 0.3), 0 1px 1px rgba(255, 255, 255, 0.5), 0 -1px 1px rgba(255, 255, 255, 0.2), inset 0 -2px 15px #000;
+    box-sizing: border-box; border: 2px solid #D4501A; height: 150px; left: 50%; margin-left: -187px;
+    position: absolute; top: 20px; width: 374px; z-index: 1;
+}
+
+/* Slot Wheels Container e Indicadores */
+#slot-wheels {
+    height: 146px; left: 13px; overflow: visible; /* Indicadores pueden sobresalir */
+    position: absolute; top: 22px; width: 374px; z-index: 2;
+    --indicator-size: 12px; --indicator-color: rgba(255, 0, 0, 0.8);
+}
+#slot-wheels::before, #slot-wheels::after { content: ''; position: absolute; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-top: var(--indicator-size) solid transparent; border-bottom: var(--indicator-size) solid transparent; z-index: 5; filter: drop-shadow(1px 0px 1px rgba(0,0,0,0.5)); }
+#slot-wheels::before { left: -8px; border-left: var(--indicator-size) solid var(--indicator-color); }
+#slot-wheels::after { right: -8px; border-right: var(--indicator-size) solid var(--indicator-color); filter: drop-shadow(-1px 0px 1px rgba(0,0,0,0.5));}
+
+/* Ruedas e Items */
+#slot-wheels .wheel { background: #FFF; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); height: 146px; overflow: hidden; position: absolute; top: 0; width: 110px; border: 1px solid #999; }
+#slot-wheels .wheel .items { position: absolute; top: 0; width: 100%; }
+#slot-wheels .wheel .items .item {
+    height: 120px; /* <-- ALTURA DEFINITIVA DEL ITEM */
+    line-height: 120px; text-align: center; font-size: 20px; font-weight: bold;
+    color: #222; background-color: #f8f8f8; border-bottom: 1px solid #ccc;
+    box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding: 0 5px; display: block;
+}
+#wheel1 { left: 10px; } #wheel2 { left: 130px; } #wheel3 { left: 250px; }
+#slot-wheels .wheel .overlay { background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.65) 100%); height: 100%; left: 0; position: absolute; top: 0; width: 100%; z-index: 2; pointer-events: none; }
+
+/* Display créditos con Mute */
+#slot-display { background: #1b1b1b; background: linear-gradient(to bottom, #1b1b1b 0%,#383838 8%,#3a3a3a 20%,#0a0a0a 47%,#010101 50%,#0d0d0d 54%,#444444 100%); border-radius: 6px; box-shadow: 0 0 10px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.2); box-sizing: border-box; border: 2px solid #444; height: 35px; left: 50%; line-height: normal; margin-left: -187px; font-family: "Courier New", Courier, monospace; font-size: 14px; position: absolute; top: 180px; /* Debajo de ruedas */ width: 374px; z-index: 3; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; color: #aaa; }
+#slot-display span { position: static; }
+.score-section { display: flex; align-items: baseline; flex-basis: 40%; /* Distribuir espacio */ }
+.record-section { justify-content: flex-start; } /* Alinear récord a la izquierda */
+.credits-section { justify-content: flex-end; } /* Alinear créditos a la derecha */
+.score-label { margin-right: 8px; font-size: 12px; text-transform: uppercase; }
+.score-value { font-weight: bold; font-size: 18px; }
+#slot-record { color: #FFD700; } #slot-credits-current { color: #78FF00; }
+#slot-overlay, #slot-overlay-line { display: none; }
+
+/* Contenedor y Botón Mute en el centro */
+#mute-container { flex-basis: 10%; text-align: center; /* Centrar botón mute */}
+#muteButton { background: none; border: none; font-size: 18px; color: #aaa; cursor: pointer; padding: 0 5px; transition: color 0.2s, text-shadow 0.2s; }
+#muteButton:hover { color: #fff; }
+#muteButton.muted { color: #f66; text-shadow: 0 0 3px #f66; }
+
+/* Base con Controles */
+#machine-base { background: #333333; background: linear-gradient(to bottom, #444 0%, #282828 100%); border-radius: 0 0 15px 15px; box-shadow: 0 5px 10px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1); padding: 25px 20px 20px 20px; box-sizing: border-box; position: relative; width: 400px; margin: 0 auto; margin-top: -5px; z-index: 5; }
+
+/* Selector Tiempo Verbal */
+#tense-selector { text-align: center; margin-bottom: 20px; }
+#tense-selector input[type="radio"] { opacity: 0; position: fixed; width: 0; }
+#tense-selector label { display: inline-block; margin: 0 5px; padding: 8px 12px; background-color: rgba(0, 0, 0, 0.4); color: #bbb; border: 1px solid #555; border-radius: 5px; cursor: pointer; font-family: 'Bungee', sans-serif; font-size: 14px; transition: all 0.2s ease; text-transform: uppercase; box-shadow: inset 0 -2px 3px rgba(0,0,0,0.3); line-height: 1; }
+#tense-selector label:hover { background-color: rgba(0, 0, 0, 0.5); color: #fff; }
+#tense-selector input[type="radio"]:checked + label { background-color: #f39c12; color: #fff; border-color: #fff; box-shadow: 0 0 10px rgba(243, 156, 18, 0.8), inset 0 1px 1px rgba(255,255,255,0.3); text-shadow: 0 0 3px rgba(255,255,255,0.5); }
+#tense-selector input[type="radio"]:focus + label { outline: 2px solid rgba(243, 156, 18, 0.5); outline-offset: 2px; }
+
+/* Feedback */
+#feedback { text-align: center; font-size: 18px; font-family: 'DotGothic16', sans-serif; color: #7CFC00; background-color: #1a1a1a; border: 2px solid #555; border-radius: 5px; padding: 8px 10px; min-height: 20px; margin-bottom: 20px; position: static; width: auto; text-shadow: 0 0 5px #7CFC00; box-shadow: inset 0 0 8px rgba(0,0,0,0.6); letter-spacing: 1px; text-transform: uppercase; }
+#feedback.correct { color: #90EE90; text-shadow: 0 0 8px #90EE90; border-color: #90EE90; }
+#feedback.incorrect { color: #FF7F7F; text-shadow: 0 0 8px #FF7F7F; border-color: #FF7F7F; }
+
+/* Controles y Botones */
+#controls { text-align: center; position: static; width: auto; transform: none; }
+#controls .spin-controls { display: flex; justify-content: space-around; gap: 10px; margin-bottom: 15px; width: 100%; }
+#controls .main-actions { display: flex; justify-content: center; gap: 15px; }
+#controls button.control-button { padding: 10px 5px; font-size: 11px; font-family: 'Bungee', sans-serif; color: #fff; cursor: pointer; border: 1px solid #111; border-radius: 5px; line-height: 1.3; min-width: 100px; text-shadow: 1px 1px 1px rgba(0,0,0,0.5); background: linear-gradient(to bottom, #666 0%, #444 100%); box-shadow: 0 3px 5px rgba(0,0,0,0.4), inset 0 -2px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); transition: all 0.15s ease; text-transform: uppercase; }
+#controls button.control-button:active:not(:disabled) { box-shadow: inset 0 1px 3px rgba(0,0,0,0.7); transform: translateY(1px); }
+#controls button.control-button:disabled { background: linear-gradient(to bottom, #555 0%, #333 100%) !important; color: #888 !important; cursor: not-allowed; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5); transform: translateY(0); text-shadow: none; }
+
+#controls .spin-button { background: linear-gradient(to bottom, #f0ad4e 0%, #ec971f 100%); border-color: #d58512;}
+#controls .spin-button:hover:not(:disabled) { background: linear-gradient(to bottom, #f3b964 0%, #f0a037 100%); }
+#controls #confirmButton { background: linear-gradient(to bottom, #5cb85c 0%, #4cae4c 100%); border-color: #398439; padding: 12px 25px; font-size: 16px; /* display: inline-block; */ margin: 0; }
+#controls #confirmButton:hover:not(:disabled) { background: linear-gradient(to bottom, #6fcc6f 0%, #56bb56 100%);}
+#resetButton { background: linear-gradient(to bottom, #d9534f 0%, #c9302c 100%); border-color: #ac2925; padding: 12px 20px; font-size: 16px; /* display: inline-block; */ margin: 0; }
+#resetButton:hover:not(:disabled) { background: linear-gradient(to bottom, #e4605b 0%, #d63c38 100%); }
+
+/* Iluminación Secuencial */
+.illuminated { border-color: #fff !important; box-shadow: 0 0 18px 6px rgba(255, 255, 180, 0.8), inset 0 0 8px 3px rgba(255, 255, 220, 0.7), 0 3px 5px rgba(0,0,0,0.4); filter: brightness(1.1); position: relative; z-index: 10; transform: scale(1.03); }
+#confirmButton.illuminated { box-shadow: 0 0 18px 6px rgba(180, 255, 180, 0.8), inset 0 0 8px 3px rgba(220, 255, 220, 0.7), 0 3px 5px rgba(0,0,0,0.4); filter: brightness(1.15); }
+#resetButton.illuminated { box-shadow: 0 0 18px 6px rgba(255, 180, 180, 0.8), inset 0 0 8px 3px rgba(255, 220, 220, 0.7), 0 3px 5px rgba(0,0,0,0.4); filter: brightness(1.15); }

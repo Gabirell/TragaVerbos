@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Máquina de Conjugar Verbos</title>
+<!-- Importar Fuentes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=DotGothic16&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<h1>Máquina de Conjugar Verbos</h1>
+</head>
+<body>
+
+<div id="page">
+    <div id="content">
+        <!-- Contenedor Principal -->
+        <div id="slot-machine-container">
+            <!-- Máquina Naranja (Parte Superior) -->
+            <div id="slot-machine">
+                <div id="slot-body">
+                    <div id="slot-frame"></div>
+                    <div id="slot-display">
+                        <!-- Sección Récord (Izquierda) -->
+                        <div class="score-section record-section">
+                             <span id="slot-record-label">RÉCORD</span>
+                             <span id="slot-record">0</span>
+                        </div>
+                         <!-- Botón de Silencio (Centro) -->
+                         <div id="mute-container">
+                            <button id="muteButton" title="Silenciar / Activar Sonido">🔊</button>
+                         </div>
+                        <!-- Sección Créditos (Derecha) -->
+                        <div class="score-section credits-section">
+                            <span id="slot-credits-label">CRÉDITOS</span>
+                            <span id="slot-credits-current">15</span>
+                        </div>
+                        <!-- Overlays internos (CSS los maneja o oculta) -->
+                        <div id="slot-overlay"></div>
+                        <div id="slot-overlay-line"></div>
+                    </div>
+                    <div id="slot-wheels">
+                        <!-- Indicadores visuales (generados por CSS ::before/::after) -->
+                        <div id="wheel1" class="wheel"> <div class="overlay"></div> <div class="items"></div> </div>
+                        <div id="wheel2" class="wheel"> <div class="overlay"></div> <div class="items"></div> </div>
+                        <div id="wheel3" class="wheel"> <div class="overlay"></div> <div class="items"></div> </div>
+                    </div>
+                     <!-- Glaze (opcional, se puede ocultar con CSS) -->
+                     <div id="slot-glaze-bottom"></div>
+                </div>
+                <!-- Detalles decorativos Top/Bottom -->
+                <div id="slot-details">
+                    <div id="slot-top"></div>
+                    <div id="slot-bottom"></div>
+                </div>
+            </div> <!-- Fin #slot-machine -->
+
+            <!-- Base con Controles -->
+            <div id="machine-base">
+                <div id="tense-selector">
+                     <input type="radio" name="tense" value="present" id="tense-present" checked>
+                     <label for="tense-present">Presente</label>
+                     <input type="radio" name="tense" value="past" id="tense-past">
+                     <label for="tense-past">Pasado</label>
+                     <input type="radio" name="tense" value="future" id="tense-future">
+                     <label for="tense-future">Futuro</label>
+                </div>
+
+                <div id="feedback">Selecciona un tiempo y gira</div>
+
+                <div id="controls">
+                    <div class="spin-controls">
+                         <button id="spinWheel1" class="spin-button control-button">AVANZA<br>Pronombre</button>
+                         <button id="spinWheel2" class="spin-button control-button">AVANZA<br>Verbo</button>
+                         <button id="spinWheel3" class="spin-button control-button">AVANZA<br>Palabra</button>
+                    </div>
+                    <div class="main-actions">
+                        <button id="confirmButton" class="control-button" disabled>Confirmar</button>
+                        <button id="resetButton" class="control-button reset-button">Reiniciar</button>
+                    </div>
+                </div>
+            </div> <!-- Fin #machine-base -->
+
+        </div> <!-- Fin #slot-machine-container -->
+    </div> <!-- Fin #content -->
+</div> <!-- Fin #page -->
+
+<!-- Elementos Audio (ocultos) - REEMPLAZA LAS RUTAS CON LAS TUYAS -->
+<audio id="audioSpin" src="audio/ruleta.mp3" preload="auto"></audio>
+<audio id="audioNudge" src="audio/avanzauno.mp3" preload="auto"></audio>
+<audio id="audioWin" src="audio/ganador2.mp3" preload="auto"></audio>
+<audio id="audioLose" src="audio/perdiste5.mp3" preload="auto"></audio>
+<audio id="audioGameOver" src="audio/perdiste2.mp3" preload="auto"></audio>
+<audio id="audioReset" src="audio/musiquitragaperras2.mp3" preload="auto"></audio>
+
+<script src="correctPhrases.js"></script> <!-- Carga frases -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Carga jQuery -->
+<script src="script.js"></script> <!-- Carga tu script -->
+</body>
+</html>
