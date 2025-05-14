@@ -127,6 +127,7 @@ const correctPhrasesData = {
     ["él", "está", "bien"],
     ["ella", "está", "bien"],
     ["nosotros", "estamos", "bien"],
+    ["nosotros", "estamos", "juntos"],
     ["nosotras", "estamos", "bien"],
     ["vosotros", "estáis", "bien"],
     ["vosotras", "estáis", "bien"],
