@@ -1,7 +1,7 @@
 (function($){ // IIFE
 
     // --- Constantes del Juego ---
-    const ITEM_HEIGHT = 90; // <-- !! VERIFICA QUE COINCIDA CON CSS .item height (90px) !!
+    const ITEM_HEIGHT = 90; // <-- !! VALOR CORRECTO SEGÚN CSS !!
     const INITIAL_SPIN_DURATION_BASE = 1500;
     const INITIAL_SPIN_DURATION_RANDOM = 1000;
     const STOP_DURATION = 800;
@@ -52,9 +52,8 @@
         $('#spinWheel1').prop('disabled', !canNudge); $('#spinWheel2').prop('disabled', !canNudge); $('#spinWheel3').prop('disabled', !canNudge);
         $('#confirmButton').prop('disabled', !canConfirm);
         $('input[name="tense"]').prop('disabled', isInitialSpinning);
-        // Botón Reset: Habilitado excepto durante el giro inicial.
-        $('#resetButton').prop('disabled', isInitialSpinning);
-        if (isGameOver) { $('#feedback').text('¡JUEGO TERMINADO! Pulsa Reiniciar.'); if(illuminationTimer) clearInterval(illuminationTimer); $('.control-button').removeClass('illuminated'); $('#resetButton').prop('disabled', false); /* Asegurar habilitado */ }
+        $('#resetButton').prop('disabled', isInitialSpinning && !isGameOver);
+        if (isGameOver) { $('#feedback').text('¡JUEGO TERMINADO! Pulsa Reiniciar.'); if(illuminationTimer) clearInterval(illuminationTimer); $('.control-button').removeClass('illuminated'); $('#resetButton').prop('disabled', false); }
     }
 
     function gameOver() { console.log("Game Over"); checkAndUpdateHighScore(); stopButtonIllumination(); isGameOver = true; updateUI(); }
@@ -71,12 +70,11 @@
             if (numItems === 0) { console.warn(`Rueda ${wheelNum} vacía.`); wheelsCompletedSpin++; if (wheelsCompletedSpin === totalWheels) { isInitialSpinning = false; updateUI(); startButtonIllumination(); } continue; }
             const finalIndex = Math.floor(Math.random() * numItems); currentWheelIndex[i] = finalIndex;
             const finalPosition = -(finalIndex * ITEM_HEIGHT);
-            const totalContentHeight = numItems * 5 * ITEM_HEIGHT; // Asume 5 repeticiones
-
+            const totalContentHeight = $wheelItems.height(); // Altura total del contenido con repeticiones
             // --- CORRECCIÓN AQUÍ ---
-            // Usa numItems en lugar de itemsArray.length para el cálculo de currentPosition
+            // Se usaba itemsArray.length que no está definido en este scope. Usar numItems.
             const currentPosition = parseInt($wheelItems.css('top'), 10) || -(numItems * ITEM_HEIGHT);
-
+            // --- FIN CORRECCIÓN ---
             const minVisualRotations = 2; const targetPosition = finalPosition - (minVisualRotations * totalContentHeight) - (Math.random() * numItems * ITEM_HEIGHT);
             const duration = INITIAL_SPIN_DURATION_BASE + Math.random() * INITIAL_SPIN_DURATION_RANDOM;
             console.log(`Rueda ${wheelNum}: Índice final ${finalIndex} (${dataArray[finalIndex] || 'N/A'}), Pos ${finalPosition}, Anim hasta ${targetPosition}`);
@@ -87,15 +85,15 @@
                                 console.log(`Rueda ${wheelNum} parada.`); wheelsCompletedSpin++;
                                 if (wheelsCompletedSpin === totalWheels) {
                                     console.log("Giro inicial completado.");
-                                    isInitialSpinning = false; // <-- Marcar como terminado ANTES de UpdateUI
+                                    isInitialSpinning = false;
                                     $('#feedback').text("¡Listo! Ajusta las ruedas o confirma.");
-                                    updateUI(); // <-- Habilitar botones AHORA
-                                    startButtonIllumination(); // <-- Reiniciar luces AHORA
+                                    updateUI();
+                                    startButtonIllumination();
                                 }
                             }}); }}); }
     }
 
-    function nudgeWheel(wheelNum) { if (isInitialSpinning || credits < COST_PER_NUDGE || isGameOver) return; playSound('audioNudge'); console.log(`Nudge R${wheelNum}`); addCredits(-COST_PER_NUDGE); const idx = wheelNum - 1; const data = wheelData[idx]; const num = data.length; if (num === 0) return; currentWheelIndex[idx] = (currentWheelIndex[idx] + 1) % num; const newIdx = currentWheelIndex[idx]; const newPos = -(newIdx * ITEM_HEIGHT); const $items = $(`#wheel${wheelNum} .items`); console.log(`  Idx ${newIdx} (${data[newIdx] || 'N/A'}), Pos ${newPos}`); $items.stop(true, false).animate({ top: newPos }, NUDGE_DURATION, 'swing'); $('#feedback').text("¡Listo! Ajusta las ruedas o confirma.").removeClass('correct incorrect'); }
+    function nudgeWheel(wheelNum) { if (isInitialSpinning || credits < COST_PER_NUDGE || isGameOver) return; playSound('audioNudge'); console.log(`Nudge R${wheelNum}`); addCredits(-COST_PER_NUDGE); const idx = wheelNum - 1; const data = wheelData[idx]; const num = data.length; if (num === 0) return; currentWheelIndex[idx] = (currentWheelIndex[idx] + 1) % num; const newIdx = currentWheelIndex[idx]; const newPos = -(newIdx * ITEM_HEIGHT); const $items = $(`#wheel${wheelNum} .items`); console.log(`  Idx ${newIdx} (${data[newIdx] || 'N/A'}), Pos ${newPos}`); $items.stop(true, false).animate({ top: newPos }, NUDGE_DURATION, 'swing'); $('#feedback').text("¡Listo!").removeClass('correct incorrect'); }
     function confirmSelection() { if (isInitialSpinning || isGameOver) return; if (currentWheelIndex.some(idx => idx < 0) || !wheelData[0] || currentWheelIndex[0] >= wheelData[0].length || !wheelData[1] || currentWheelIndex[1] >= wheelData[1].length || !wheelData[2] || currentWheelIndex[2] >= wheelData[2].length) { console.error("Índices inválidos.", currentWheelIndex, wheelData); $('#feedback').text("Error."); return; } const p = wheelData[0][currentWheelIndex[0]]; const v = wheelData[1][currentWheelIndex[1]]; const w = wheelData[2][currentWheelIndex[2]]; const currentArr = [p, v, w]; console.log(`Confirmando [${currentTense}]: ${currentArr.join(' ')}`); stopButtonIllumination(); isInitialSpinning = true; updateUI(); const isOk = correctPhrasesData[currentTense].some(ok => ok.length === 3 && ok[0] === p && ok[1] === v && ok[2] === w ); let msg = ""; if (isOk) { msg = `¡Correcto! "${currentArr.join(' ')}". +${POINTS_PER_WIN} créditos`; playSound('audioWin'); addCredits(POINTS_PER_WIN); } else { const transTense = tenseTranslations[currentTense] || currentTense; msg = `Incorrecto (${transTense}).`; playSound('audioLose'); } $('#feedback').text(msg).removeClass('correct incorrect').addClass(isOk ? 'correct' : 'incorrect'); setTimeout(() => { if (credits <= 0) { playSound('audioGameOver'); gameOver(); } else { initialSpinAllWheels(); } }, isOk ? FEEDBACK_DELAY_CORRECT : FEEDBACK_DELAY_INCORRECT); }
     function populateWheelHTML(wheelNum, items) { const $items = $(`#wheel${wheelNum} .items`); $items.empty(); const reps = 5; if (!items || items.length === 0) { console.warn(`Rueda ${wheelNum} sin items.`); $('<span></span>').addClass('item').text('-').appendTo($items); $items.css('height', ITEM_HEIGHT + 'px'); return; } for (let r = 0; r < reps; r++) { items.forEach(t => { $('<span></span>').addClass('item').text(t).appendTo($items); }); } $items.css('height', items.length * reps * ITEM_HEIGHT + 'px'); const initPos = -(items.length * ITEM_HEIGHT); $items.css('top', initPos + 'px'); if(currentWheelIndex[wheelNum-1] >= items.length || currentWheelIndex[wheelNum-1] < 0) { currentWheelIndex[wheelNum-1] = 0; } }
     function handleTenseChange() { if (isInitialSpinning) { $(`input[name="tense"][value="${currentTense}"]`).prop('checked', true); return; } currentTense = $('input[name="tense"]:checked').val(); console.log(`Tiempo: ${currentTense}`); populateWheelsForTense(); initialSpinAllWheels(); }
