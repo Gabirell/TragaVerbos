@@ -451,13 +451,14 @@ const correctPhrasesData = {
     ["nosotros", "comemos", "hoy"],
     ["nosotros", "comemos", "felices"],
     ["nosotros", "comemos", "solos"],
+    ["nosotros", "comemos", "siempre"], // Masculino
     ["nosotras", "comemos", "pizza"],
     ["nosotras", "comemos", "fruta"],
     ["nosotras", "comemos", "tarde"],
     ["nosotras", "comemos", "rápido"],
     ["nosotras", "comemos", "sopa"],
     ["nosotras", "comemos", "aquí"],
-    ["nosotras", "comemos", "allí"], // Añadido
+    ["nosotras", "comemos", "allí"], 
     ["nosotras", "comemos", "pan"],
     ["nosotras", "comemos", "lento"],
     ["nosotras", "comemos", "mucho"],
@@ -469,6 +470,7 @@ const correctPhrasesData = {
     ["nosotras", "comemos", "hoy"],
     ["nosotras", "comemos", "felices"],
     ["nosotras", "comemos", "solas"],
+    ["nosotras", "comemos", "siempre"], // Femenino
     ["vosotros", "coméis", "pizza"],
     ["vosotros", "coméis", "fruta"],
     ["vosotros", "coméis", "tarde"],
